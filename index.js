@@ -12,81 +12,82 @@ const baseURL =
 
 const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
 // schedule cron to run every minute
-// cron.schedule("* * * * *", async () => {
-console.log("running a task every 5 minutes");
-const usersUrl = `${baseURL}/api/users/linkedin/users`;
+// cron.schedule("* * * * *",
+(async () => {
+  console.log("running a task every 5 minutes");
+  const usersUrl = `${baseURL}/api/users/linkedin/users`;
 
-// get the data from the api async/await
-const getData = async (url) => {
-  try {
-    const response = await axios.get(url);
-    const { data } = response;
-    //   console.log(data);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-let users = await getData(usersUrl);
-//   get all posts for the users
-const usersIds = users.map((user) => user.id);
-//   loop over the users and get the posts for each user
-await usersIds.forEach(async (userId, index, array) => {
-  const getPosts = async () => {
-    const options = {
-      method: "GET",
-      url: "http://localhost:5000/api/posts",
-      params: { userId: userId },
-    };
+  // get the data from the api async/await
+  const getData = async (url) => {
     try {
-      const res = await axios.request(options);
-      return res.data;
-    } catch (err) {
-      console.error(err);
+      const response = await axios.get(url);
+      const { data } = response;
+      //   console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
     }
   };
-  let { posts } = await getPosts();
-
-  posts.forEach(async (post) => {
-    const user = users.find((user) => user.id === post.id);
-    const { accessToken, id } = user;
-    const { content, _id, date, isPosted, image } = post;
-    // check if date is past, using dayjs, if yes, post to linkedin, and then delete from db
-    if (!isPosted && dayjs(date).isBefore(dayjs())) {
-      const status = await postToLinkedin(content, accessToken, id, image);
-      console.log(
-        "🚀 ~ file: index.js ~ line 54 ~ posts.forEach ~ status",
-        status
-      );
-      if (status === 201) {
-        // update the post from the db with isPosted: true
-        const updateUrl = `${baseURL}/api/posts/${_id}`;
-        const updatePost = async (url) => {
-          try {
-            const body = {
-              isPosted: true,
-              id: id,
-              content: content,
-              date: date,
-              image: image,
-            };
-            const response = await axios.put(url, body);
-            const { data } = response;
-            console.log(
-              "🚀 ~ file: index.js ~ line 62 ~ deletePost ~ data",
-              data
-            );
-            return data;
-          } catch (error) {
-            console.log(error);
-          }
-        };
-        updatePost(updateUrl);
+  let users = await getData(usersUrl);
+  //   get all posts for the users
+  const usersIds = users.map((user) => user.id);
+  //   loop over the users and get the posts for each user
+  await usersIds.forEach(async (userId, index, array) => {
+    const getPosts = async () => {
+      const options = {
+        method: "GET",
+        url: "http://localhost:5000/api/posts",
+        params: { userId: userId },
+      };
+      try {
+        const res = await axios.request(options);
+        return res.data;
+      } catch (err) {
+        console.error(err);
       }
-    }
+    };
+    let { posts } = await getPosts();
+
+    posts.forEach(async (post) => {
+      const user = users.find((user) => user.id === post.id);
+      const { accessToken, id } = user;
+      const { content, _id, date, isPosted, image } = post;
+      // check if date is past, using dayjs, if yes, post to linkedin, and then delete from db
+      if (!isPosted && dayjs(date).isBefore(dayjs())) {
+        const status = await postToLinkedin(content, accessToken, id, image);
+        console.log(
+          "🚀 ~ file: index.js ~ line 54 ~ posts.forEach ~ status",
+          status
+        );
+        if (status === 201) {
+          // update the post from the db with isPosted: true
+          const updateUrl = `${baseURL}/api/posts/${_id}`;
+          const updatePost = async (url) => {
+            try {
+              const body = {
+                isPosted: true,
+                id: id,
+                content: content,
+                date: date,
+                image: image,
+              };
+              const response = await axios.put(url, body);
+              const { data } = response;
+              console.log(
+                "🚀 ~ file: index.js ~ line 62 ~ deletePost ~ data",
+                data
+              );
+              return data;
+            } catch (error) {
+              console.log(error);
+            }
+          };
+          updatePost(updateUrl);
+        }
+      }
+    });
   });
-});
-// });
+})();
 
 // function to post to linkedin via the api, this will be called in the cron job, and will post to linkedin, and then delete the post from the db
 const postToLinkedin = async (content, accessToken, id, image = null) => {
