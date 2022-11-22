@@ -5,17 +5,18 @@ const dayjs = require("dayjs");
 const FormData = require("form-data");
 const API_PORT = "5000";
 console.log(process.env.NODE_ENV);
-const baseURL =
-  process.env.NODE_ENV === "development"
-    ? `http://localhost:${API_PORT}`
-    : `https://pigeon-api.onrender.com`;
 
 const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
 // schedule cron to run every minute
 // cron.schedule("* * * * *",
 (async () => {
+  const baseURL =
+    process.env.NODE_ENV === "development"
+      ? `http://localhost:${API_PORT}`
+      : `https://pigeon-api.onrender.com`;
   console.log("running a task every 5 minutes");
   const usersUrl = `${baseURL}/api/users/linkedin/users`;
+  console.log("🚀 ~ file: index.js ~ line 19 ~ usersUrl", usersUrl);
 
   // get the data from the api async/await
   const getData = async (url) => {
