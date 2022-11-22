@@ -37,7 +37,7 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
     const getPosts = async () => {
       const options = {
         method: "GET",
-        url: "http://localhost:5000/api/posts",
+        url: `${baseURL}/api/posts`,
         params: { userId: userId },
       };
       try {
