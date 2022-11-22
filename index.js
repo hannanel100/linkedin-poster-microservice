@@ -8,7 +8,7 @@ console.log(process.env.NODE_ENV);
 const baseURL =
   process.env.NODE_ENV === "development"
     ? `http://localhost:${API_PORT}`
-    : `https://pigeon-api.onrender.com:${API_PORT}`;
+    : `https://pigeon-api.onrender.com`;
 
 const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
 // schedule cron to run every minute
