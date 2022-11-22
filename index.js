@@ -48,6 +48,10 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
       }
     };
     let { posts } = await getPosts();
+    console.log(
+      "🚀 ~ file: index.js ~ line 51 ~ awaitusersIds.forEach ~ posts",
+      posts
+    );
 
     posts.forEach(async (post) => {
       const user = users.find((user) => user.id === post.id);
