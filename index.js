@@ -30,6 +30,7 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
     }
   };
   let users = await getData(usersUrl);
+  console.log("🚀 ~ file: index.js ~ line 33 ~ users", users);
   //   get all posts for the users
   const usersIds = users.map((user) => user.id);
   //   loop over the users and get the posts for each user
