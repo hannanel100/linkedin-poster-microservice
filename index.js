@@ -45,7 +45,7 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
         const res = await axios.request(options);
         return res.data;
       } catch (err) {
-        console.error(err);
+        console.log("🚀 ~ file: index.js ~ line 48 ~ getPosts ~ err", err);
       }
     };
     let { posts } = await getPosts();
@@ -85,7 +85,10 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
               );
               return data;
             } catch (error) {
-              console.log(error);
+              console.log(
+                "🚀 ~ file: index.js ~ line 88 ~ updatePost ~ error",
+                error
+              );
             }
           };
           updatePost(updateUrl);
@@ -134,7 +137,10 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
 
       asset = data.value.asset;
     } catch (error) {
-      console.error(error);
+      console.log(
+        "🚀 ~ file: index.js ~ line 140 ~ postToLinkedin ~ error",
+        error
+      );
     }
 
     // Upload your image to LinkedIn.
@@ -153,7 +159,10 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
         data
       );
     } catch (error) {
-      console.error(error);
+      console.log(
+        "🚀 ~ file: index.js ~ line 162 ~ postToLinkedin ~ error",
+        error
+      );
     }
     // Create the image share.
     shareBody = {
@@ -208,7 +217,10 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
     console.log(response);
     return response.status;
   } catch (error) {
-    console.log(error);
+    console.log(
+      "🚀 ~ file: index.js ~ line 220 ~ postToLinkedin ~ error",
+      error
+    );
     return error;
   }
 };
