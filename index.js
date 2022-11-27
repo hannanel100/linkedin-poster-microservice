@@ -43,6 +43,7 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
       };
       try {
         const res = await axios.request(options);
+        console.log("🚀 ~ file: index.js ~ line 46 ~ getPosts ~ res", res);
         return res.data;
       } catch (err) {
         console.log("🚀 ~ file: index.js ~ line 48 ~ getPosts ~ err", err);
