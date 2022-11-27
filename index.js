@@ -2,6 +2,9 @@
 const cron = require("node-cron");
 const axios = require("axios");
 const dayjs = require("dayjs");
+// extend the dayjs library to add a custom format utc
+dayjs.extend(utc)
+
 const FormData = require("form-data");
 const API_PORT = "5000";
 console.log(process.env.NODE_ENV);
