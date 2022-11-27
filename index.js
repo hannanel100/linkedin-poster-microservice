@@ -59,6 +59,16 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
       const user = users.find((user) => user.id === post.id);
       const { accessToken, id } = user;
       const { content, _id, date, isPosted, image } = post;
+      console.log("🚀 ~ file: index.js ~ line 62 ~ posts.forEach ~ post", post);
+      console.log(
+        "🚀 ~ file: index.js ~ line 63 ~ posts.forEach ~ (dayjs(date).isBefore(dayjs()",
+        dayjs(date).isBefore()
+      );
+      console.log(
+        "🚀 ~ file: index.js ~ line 68 ~ posts.forEach ~ dayjs()",
+        dayjs().format("YYYY-MM-DD HH:mm:ss")
+      );
+
       // check if date is past, using dayjs, if yes, post to linkedin, and then delete from db
       if (!isPosted && dayjs(date).isBefore(dayjs())) {
         const status = await postToLinkedin(content, accessToken, id, image);
