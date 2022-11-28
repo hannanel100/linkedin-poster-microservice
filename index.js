@@ -1,6 +1,6 @@
 // this is a microservice that will read the db, via the api, and then share on linkedin via the linkedin api
-const cron = require("node-cron");
 const axios = require("axios");
+
 const dayjs = require("dayjs");
 // extend the dayjs library to add a custom format utc
 const utc = require("dayjs/plugin/utc");
@@ -11,8 +11,7 @@ const API_PORT = "5000";
 console.log(process.env.NODE_ENV);
 
 const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
-// schedule cron to run every minute
-// cron.schedule("* * * * *",
+
 (async () => {
   const baseURL =
     process.env.NODE_ENV === "development"
