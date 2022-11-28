@@ -115,6 +115,7 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
 
 // function to post to linkedin via the api, this will be called in the cron job, and will post to linkedin, and then delete the post from the db
 const postToLinkedin = async (content, accessToken, id, image = null) => {
+  console.log("🚀 ~ file: index.js ~ line 118 ~ postToLinkedin ~ image", image);
   const shareUrl = "https://api.linkedin.com/v2/ugcPosts";
   const headers = {
     "X-Restli-Protocol-Version": "2.0.0",
