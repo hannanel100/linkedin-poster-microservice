@@ -145,6 +145,10 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
         data.value.uploadMechanism[
           "com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"
         ].uploadUrl;
+      console.log(
+        "🚀 ~ file: index.js ~ line 149 ~ postToLinkedin ~ uploadUrl",
+        uploadUrl
+      );
 
       asset = data.value.asset;
     } catch (error) {
@@ -161,6 +165,10 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
       const imageBuffer = await axios.get(image, {
         responseType: "arraybuffer",
       });
+      console.log(
+        "🚀 ~ file: index.js ~ line 168 ~ postToLinkedin ~ imageBuffer",
+        imageBuffer
+      );
 
       const formData = new FormData();
       formData.append("fileupload", imageBuffer);
