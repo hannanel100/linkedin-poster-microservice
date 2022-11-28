@@ -1,6 +1,8 @@
 // this is a microservice that will read the db, via the api, and then share on linkedin via the linkedin api
 const cron = require("node-cron");
 const axios = require("axios");
+const utf8 = require("utf8");
+
 const dayjs = require("dayjs");
 // extend the dayjs library to add a custom format utc
 const utc = require("dayjs/plugin/utc");
@@ -110,6 +112,7 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
 
 // function to post to linkedin via the api, this will be called in the cron job, and will post to linkedin, and then delete the post from the db
 const postToLinkedin = async (content, accessToken, id, image = null) => {
+  let utf8Content = utf8.encode(content);
   console.log("🚀 ~ file: index.js ~ line 118 ~ postToLinkedin ~ image", image);
   const shareUrl = "https://api.linkedin.com/v2/ugcPosts";
   const headers = {
@@ -194,7 +197,7 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
       specificContent: {
         "com.linkedin.ugc.ShareContent": {
           shareCommentary: {
-            text: content,
+            text: utf8Content,
           },
           shareMediaCategory: "IMAGE",
           media: [
@@ -222,7 +225,7 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
       specificContent: {
         "com.linkedin.ugc.ShareContent": {
           shareCommentary: {
-            text: content,
+            text: utf8Content,
           },
           shareMediaCategory: "NONE",
         },
