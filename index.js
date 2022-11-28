@@ -171,7 +171,7 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
       );
 
       const formData = new FormData();
-      formData.append("fileupload", imageBuffer);
+      formData.append("fileupload", imageBuffer.data);
       const uploadResponse = await axios.put(uploadUrl, formData, {
         ...headers,
         ...formData.getHeaders(),
