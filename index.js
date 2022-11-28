@@ -156,7 +156,11 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
 
     // Upload your image to LinkedIn.
     try {
-      const imageBuffer = Buffer.from(image, "base64");
+      // const imageBuffer = Buffer.from(image, "base64");
+      // create image binary from image url
+      const imageBuffer = await axios.get(image, {
+        responseType: "arraybuffer",
+      });
 
       const formData = new FormData();
       formData.append("fileupload", imageBuffer);
@@ -171,7 +175,7 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
       );
     } catch (error) {
       console.log(
-        "🚀 ~ file: index.js ~ line 162 ~ postToLinkedin ~ error",
+        "🚀 ~ file: index.js ~ line 172 ~ postToLinkedin ~ error",
         error
       );
     }
