@@ -29,7 +29,7 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
       //   console.log(data);
       return data;
     } catch (error) {
-      console.log(error);
+      console.log("🚀 ~ file: index.js ~ line 32 ~ getData ~ error", error);
     }
   };
   let users = await getData(usersUrl);
@@ -46,15 +46,15 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
       };
       try {
         const res = await axios.request(options);
-        console.log("🚀 ~ file: index.js ~ line 46 ~ getPosts ~ res", res.data);
+        console.log("🚀 ~ file: index.js ~ line 49 ~ getPosts ~ res", res.data);
         return res.data;
       } catch (err) {
-        console.log("🚀 ~ file: index.js ~ line 48 ~ getPosts ~ err", err);
+        console.log("🚀 ~ file: index.js ~ line 52 ~ getPosts ~ err", err);
       }
     };
     let { posts } = await getPosts();
     console.log(
-      "🚀 ~ file: index.js ~ line 51 ~ awaitusersIds.forEach ~ posts",
+      "🚀 ~ file: index.js ~ line 57 ~ await usersIds.forEach ~ posts",
       posts
     );
 
@@ -62,10 +62,22 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
       const user = users.find((user) => user.id === post.id);
       const { accessToken, id } = user;
       const { content, _id, date, isPosted, image } = post;
-
+      // turn image from cloudinary into a buffer
+      const imageBuffer = await axios.get(image, {
+        responseType: "arraybuffer",
+      });
+      console.log(
+        "🚀 ~ file: index.js ~ line 69 ~ posts.forEach ~ imageBuffer",
+        imageBuffer
+      );
       // check if date is past, using dayjs, if yes, post to linkedin, and then delete from db
       if (!isPosted && dayjs(date).isBefore(dayjs())) {
-        const status = await postToLinkedin(content, accessToken, id, image);
+        const status = await postToLinkedin(
+          content,
+          accessToken,
+          id,
+          imageBuffer
+        );
         console.log(
           "🚀 ~ file: index.js ~ line 54 ~ posts.forEach ~ status",
           status
@@ -152,7 +164,7 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
       asset = data.value.asset;
     } catch (error) {
       console.log(
-        "🚀 ~ file: index.js ~ line 140 ~ postToLinkedin ~ error",
+        "🚀 ~ file: index.js ~ line 154 ~ postToLinkedin ~ error",
         error
       );
     }
@@ -177,12 +189,12 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
       });
       const { data } = uploadResponse;
       console.log(
-        "🚀 ~ file: index.js ~ line 136 ~ postToLinkedin ~ data",
+        "🚀 ~ file: index.js ~ line 180 ~ postToLinkedin ~ data",
         data
       );
     } catch (error) {
       console.log(
-        "🚀 ~ file: index.js ~ line 172 ~ postToLinkedin ~ error",
+        "🚀 ~ file: index.js ~ line 185 ~ postToLinkedin ~ error",
         error
       );
     }
@@ -236,11 +248,14 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
     const response = await axios.post(shareUrl, shareBody, {
       headers: headers,
     });
-    console.log(response);
+    console.log(
+      "🚀 ~ file: index.js ~ line 239 ~ postToLinkedin ~ response",
+      response
+    );
     return response.status;
   } catch (error) {
     console.log(
-      "🚀 ~ file: index.js ~ line 220 ~ postToLinkedin ~ error",
+      "🚀 ~ file: index.js ~ line 243 ~ postToLinkedin ~ error",
       error
     );
     return error;
