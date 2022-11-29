@@ -62,14 +62,24 @@ const VISIBILITY = ["PUBLIC", "CONNECTIONS"];
       const user = users.find((user) => user.id === post.id);
       const { accessToken, id } = user;
       const { content, _id, date, isPosted, image } = post;
-      // turn image from cloudinary into a buffer
-      const imageBuffer = await axios.get(image, {
-        responseType: "arraybuffer",
-      });
-      console.log(
-        "🚀 ~ file: index.js ~ line 69 ~ posts.forEach ~ imageBuffer",
-        imageBuffer
-      );
+      // get image from cloudinary link in image
+      const getImage = async () => {
+        const options = {
+          method: "GET",
+          url: image,
+        };
+        try {
+          const res = await axios.request(options);
+          console.log(
+            "🚀 ~ file: index.js ~ line 71 ~ getImage ~ res",
+            res.data
+          );
+          return res.data;
+        } catch (err) {
+          console.log("🚀 ~ file: index.js ~ line 74 ~ getImage ~ err", err);
+        }
+      };
+      let imageBuffer = await getImage();
       // check if date is past, using dayjs, if yes, post to linkedin, and then delete from db
       if (!isPosted && dayjs(date).isBefore(dayjs())) {
         const status = await postToLinkedin(
@@ -173,16 +183,8 @@ const postToLinkedin = async (content, accessToken, id, image = null) => {
     try {
       // const imageBuffer = Buffer.from(image, "base64");
       // create image binary from image url
-      const imageBuffer = await axios.get(image, {
-        responseType: "arraybuffer",
-      });
-      console.log(
-        "🚀 ~ file: index.js ~ line 168 ~ postToLinkedin ~ imageBuffer",
-        imageBuffer
-      );
-
       const formData = new FormData();
-      formData.append("fileupload", imageBuffer.data);
+      formData.append("fileupload", image);
       const uploadResponse = await axios.put(uploadUrl, formData, {
         ...headers,
         ...formData.getHeaders(),
